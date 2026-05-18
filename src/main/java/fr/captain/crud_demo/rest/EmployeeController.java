@@ -1,11 +1,8 @@
 package fr.captain.crud_demo.rest;
 
 import fr.captain.crud_demo.entity.Employee;
-import fr.captain.crud_demo.service.EmployeeServiceImpl;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import fr.captain.crud_demo.service.EmployeeService;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -13,20 +10,38 @@ import java.util.List;
 @RequestMapping("/api")
 public class EmployeeController {
 
-    private final EmployeeServiceImpl employeeServiceImpl;
+    private final EmployeeService employeeService;
 
-    public EmployeeController(EmployeeServiceImpl employeeServiceImpl) {
-        this.employeeServiceImpl = employeeServiceImpl;
+    public EmployeeController(EmployeeService employeeService) {
+        this.employeeService = employeeService;
     }
 
     @GetMapping("/employees/{id}")
     public Employee getEmployeeById(@PathVariable int id) {
-        return employeeServiceImpl.getEmployeeById(id);
+        Employee employee = employeeService.getEmployeeById(id);
+        if (employee == null) {
+            throw new RuntimeException("Employee not found: " + employee);
+        }
+        return employeeService.getEmployeeById(id);
     }
 
     @GetMapping("/employees")
     public List<Employee> getAllEmployee() {
-        return employeeServiceImpl.getAllEmployees();
+        return employeeService.getAllEmployees();
     }
 
+    @PostMapping("/employees")
+    public Employee createEmployee(@RequestBody Employee employee) {
+        return employeeService.save(employee);
+    }
+
+    @PutMapping("/employees")
+    public Employee updateEmployee(@RequestBody Employee employee) {
+        return employeeService.save(employee);
+    }
+
+    @DeleteMapping("/employees/{id}")
+    public void deleteEmployee(@PathVariable int id) {
+        employeeService.deleteById(id);
+    }
 }
