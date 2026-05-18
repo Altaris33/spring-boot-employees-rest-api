@@ -19,13 +19,13 @@ public class EmployeeDAOImpl implements EmployeeDAO {
     @Override
     public Employee getEmployeeById(int id) {
         TypedQuery<Employee> query
-                = entityManager.createQuery("from Employee where id=:id", Employee.class);
+                = entityManager.createQuery("SELECT e FROM Employee e WHERE e.id=:id", Employee.class);
         query.setParameter("id", id);
         return query.getSingleResult();
     }
 
     @Override
     public List<Employee> getAllEmployees() {
-        return entityManager.createQuery("from Employee", Employee.class).getResultList();
+        return entityManager.createQuery("FROM Employee", Employee.class).getResultList();
     }
 }
